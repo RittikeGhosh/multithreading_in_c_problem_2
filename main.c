@@ -3,63 +3,18 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
-
+#define MAX_STRING_LEN 20
 typedef long double l_double;
 typedef unsigned long long int ull_int;
-#define MAX_STRING_LEN 20
+
+void* average(void* data);
+void* max(void* data);
+void* min(void* data);
 
 struct Data{
     ull_int argn;
     l_double* arr_data;
 };
-
-
-void* average(void* data)
-{
-    struct Data* object = (struct Data*)data;
-    l_double sum = 0, average;
-
-    for(ull_int i = 0; i < object->argn; i++)
-        sum += object->arr_data[i];
-
-    average = sum / object->argn;
-
-    printf("\nTHE AVERAGE VALUE IS(rounded to 2 decimal values) : %0.2Lf", average);
-    return NULL;
-}
-
-
-void* min(void* data)
-{
-    struct Data* object = (struct Data*)data;
-    l_double min = object->arr_data[0];
-
-    for(ull_int i = 0; i < object->argn; i++)
-    {
-        if(min > object->arr_data[i])
-            min = object->arr_data[i];
-    }
-
-    printf("\nTHE MINIMUM VALUE IS(rounded to 2 decimal values) : %0.2Lf", min);
-    return NULL;
-}
-
-
-void* max(void* data)
-{
-    struct Data* object = (struct Data*)data;
-    l_double max = object->arr_data[0];
-
-    for(ull_int i = 0; i < object->argn; i++)
-    {
-        if(max < object->arr_data[i])
-            max = object->arr_data[i];
-    }
-
-    printf("\nTHE MAXIMUM VALUE IS(rounded to 2 decimal values) : %0.2Lf", max);
-    return NULL;
-}
-
 
 int main(ull_int argn, char** args)
 {
@@ -77,10 +32,10 @@ int main(ull_int argn, char** args)
 	printf("[You can pass the data(seperated with space) in the execution line of the application]\n");
 	printf("Like this ==> ./a.out [[arg1] [arg2] [...]]\n");
 	printf("Don't worry I can help you... You can give the data here too.\n\n");
-
 	fflush(stdin);
+	    
 	do{
-	   char choice = 'y', flush = ' ';
+	   char choice = 'y';
 	   printf("Do you want to continue or end ?(y/n)  ");
 	   scanf(" %c",&choice);
 	   if(choice == 'n')
@@ -115,15 +70,12 @@ int main(ull_int argn, char** args)
     for(ull_int i = 1; i < argn; i++)
         object.arr_data[i-1] = strtold(args[i], NULL);
 
-    printf("\nThe provided values(rounded to 2 decimal values) are : [ ");
+    printf("\nThe provided values(rounded to 3 decimal values) are : [ ");
     for(ull_int i = 0; i < argn - 1; i++)
-        printf("%0.2Lf ,", object.arr_data[i]);
+        printf("%0.3Lf ,", object.arr_data[i]);
     printf("\b]\n\n");
 
-    pthread_t averageThread;
-    pthread_t minThread;
-    pthread_t maxThread;
-
+    pthread_t averageThread, minThread, maxThread;
     pthread_create(&averageThread, NULL, average, &object);
     pthread_create(&minThread, NULL, min, &object);
     pthread_create(&maxThread, NULL, max, &object);
@@ -136,4 +88,48 @@ int main(ull_int argn, char** args)
     printf("\n");
     getchar();
     return 0;
+}
+
+void* average(void* data)
+{
+    struct Data* object = (struct Data*)data;
+    l_double sum = 0, average;
+
+    for(ull_int i = 0; i < object->argn; i++)
+        sum += object->arr_data[i];
+
+    average = sum / object->argn;
+
+    printf("\nTHE AVERAGE VALUE IS(rounded to 3 decimal values) : %0.3Lf", average);
+    return NULL;
+}
+
+void* min(void* data)
+{
+    struct Data* object = (struct Data*)data;
+    l_double min = object->arr_data[0];
+
+    for(ull_int i = 0; i < object->argn; i++)
+    {
+        if(min > object->arr_data[i])
+            min = object->arr_data[i];
+    }
+
+    printf("\nTHE MINIMUM VALUE IS(rounded to 3 decimal values) : %0.3Lf", min);
+    return NULL;
+}
+
+void* max(void* data)
+{
+    struct Data* object = (struct Data*)data;
+    l_double max = object->arr_data[0];
+
+    for(ull_int i = 0; i < object->argn; i++)
+    {
+        if(max < object->arr_data[i])
+            max = object->arr_data[i];
+    }
+
+    printf("\nTHE MAXIMUM VALUE IS(rounded to 3 decimal values) : %0.3Lf", max);
+    return NULL;
 }
