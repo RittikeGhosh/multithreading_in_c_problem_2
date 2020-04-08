@@ -3,10 +3,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
-
+#define MAX_STRING_LEN 20
 typedef long double l_double;
 typedef unsigned long long int ull_int;
-#define MAX_STRING_LEN 20
+
+void* average(void* data);
+void* max(void* data);
+void* min(void* data);
 
 struct Data{
     ull_int argn;
@@ -82,8 +85,9 @@ int main(ull_int argn, char** args)
 	printf("But don't worry I can help you... You can give the data here too.\n\n");
     // ask user for continue to provide input now
 	fflush(stdin);
+	    
 	do{
-	   char choice = 'y', flush = ' ';
+	   char choice = 'y';
 	   printf("Do you want to give inputs now ?(y/n)  ");
 	   scanf(" %c",&choice);
 	   if(choice == 'n')
@@ -123,10 +127,7 @@ int main(ull_int argn, char** args)
         printf("%0.3Lf ,", object.arr_data[i]);
     printf("\b]\n\n");
 
-    pthread_t averageThread;
-    pthread_t minThread;
-    pthread_t maxThread;
-
+    pthread_t averageThread, minThread, maxThread;
     pthread_create(&averageThread, NULL, average, &object);
     pthread_create(&minThread, NULL, min, &object);
     pthread_create(&maxThread, NULL, max, &object);

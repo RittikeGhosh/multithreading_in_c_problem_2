@@ -14,3 +14,12 @@ For example,
     > *The maximum value is 95*<br/>
 
 3. The  variables  representing  the  average,  minimum,  and  maximum  values  will  be  stored globally.  The  worker  threads  will  set these values,  and  the  parent  thread  will  output  the values once the workers have exited.
+
+
+### B. Execution
+compile the code with ```gcc```<br>
+```gcc main.c -lpthread```<br>
+Once the compilation is done, the a.out file created can be executed. <br>
+Parameters can be passed both 
+* from execution line of the program ```./a.out [[data1] [data2] [data3] ...]```
+* during execution of program (just execute : ```./a.out```)
