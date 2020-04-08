@@ -24,7 +24,7 @@ void* average(void* data)
 
     average = sum / object->argn;
 
-    printf("\nTHE AVERAGE VALUE IS(rounded to 2 decimal values) : %0.2Lf", average);
+    printf("\nTHE AVERAGE VALUE IS : %0.3Lf", average);
     return NULL;
 }
 
@@ -40,7 +40,7 @@ void* min(void* data)
             min = object->arr_data[i];
     }
 
-    printf("\nTHE MINIMUM VALUE IS(rounded to 2 decimal values) : %0.2Lf", min);
+    printf("\nTHE MINIMUM VALUE IS : %0.3Lf", min);
     return NULL;
 }
 
@@ -56,32 +56,35 @@ void* max(void* data)
             max = object->arr_data[i];
     }
 
-    printf("\nTHE MAXIMUM VALUE IS(rounded to 2 decimal values) : %0.2Lf", max);
+    printf("\nTHE MAXIMUM VALUE IS : %0.3Lf", max);
     return NULL;
 }
 
 
 int main(ull_int argn, char** args)
 {
+    // welcome message
     system("clear");
-    printf("\n#######################################################################################");
-    printf("\n#                                                                                     #");
-    printf("\n#                    Welcome: I will help you solving the problem                     #");
-    printf("\n#                                                                                     #");
-    printf("\n#######################################################################################");
+    printf("\n#######################################################################");
+    printf("\n#                                                                     #");
+    printf("\n#            Welcome: I will help you solving the problem             #");
+    printf("\n#       I will calculate the MIN, MAX and AVERAGE with threads        #");
+    printf("\n#                             :-> :-) :->                             #");
+    printf("\n#                                                                     #");
+    printf("\n#######################################################################");
     printf("\n\n");
-
+    // check for user input in the execution line
     if (argn == 1)
     {
 	printf("It seems that you did not pass any number.\n");
 	printf("[You can pass the data(seperated with space) in the execution line of the application]\n");
 	printf("Like this ==> ./a.out [[arg1] [arg2] [...]]\n");
-	printf("Don't worry I can help you... You can give the data here too.\n\n");
-
+	printf("But don't worry I can help you... You can give the data here too.\n\n");
+    // ask user for continue to provide input now
 	fflush(stdin);
 	do{
 	   char choice = 'y', flush = ' ';
-	   printf("Do you want to continue or end ?(y/n)  ");
+	   printf("Do you want to give inputs now ?(y/n)  ");
 	   scanf(" %c",&choice);
 	   if(choice == 'n')
 	   	goto end;
@@ -102,11 +105,11 @@ int main(ull_int argn, char** args)
 	printf("\n[Enter the numbers adjacent to the staments](MAX DIGIT COUNT = 20)\n");
 	for (ull_int i = 1; i<argn; i++)
 	{
-	    printf("Enter the element %llu :", i);
+	    printf("Enter the element %llu : ", i);
 	    scanf("%s", args[i]);
 	}
     }
-
+    // create instance of the struct Data
     struct Data object = {
         argn - 1,
         (void*)calloc(argn-1, sizeof(l_double))
@@ -115,9 +118,9 @@ int main(ull_int argn, char** args)
     for(ull_int i = 1; i < argn; i++)
         object.arr_data[i-1] = strtold(args[i], NULL);
 
-    printf("\nThe provided values(rounded to 2 decimal values) are : [ ");
+    printf("\n*The provided values(rounded to 3 decimal values) are : \n=> [ ");
     for(ull_int i = 0; i < argn - 1; i++)
-        printf("%0.2Lf ,", object.arr_data[i]);
+        printf("%0.3Lf ,", object.arr_data[i]);
     printf("\b]\n\n");
 
     pthread_t averageThread;
@@ -130,6 +133,7 @@ int main(ull_int argn, char** args)
     pthread_join(maxThread, NULL);
     pthread_join(minThread, NULL);
     pthread_join(averageThread, NULL);
+    printf("\n(The values are rounded to 3 decimal values)");
 
     end:
     printf("\n\nThank You for your visit :-) :-> \n");
